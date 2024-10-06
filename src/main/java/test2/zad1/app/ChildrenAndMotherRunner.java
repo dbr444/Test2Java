@@ -44,7 +44,7 @@ public class ChildrenAndMotherRunner {
 
         // e) Matki blizniakow
         List<Mother> twinMothers = ChildService.findMothersOfTwins(mothers);
-        System.out.println("Mothers of twins: " + twinMothers);
+        System.out.println("Mothers of twins: ");
         for (Mother mother : twinMothers) {
             System.out.println(mother.getName());
         }

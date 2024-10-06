@@ -12,26 +12,32 @@ import java.util.List;
 
 public class DataLoader {
 
-    public List<Mother> loadMothers(String filename) throws IOException {
+    public List<Mother> loadMothers(String filename) {
         List<Mother> mothers = new ArrayList<>();
+
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
+
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(" ");
                 int motherId = Integer.parseInt(data[0]);
                 String name = data[1];
                 int age = Integer.parseInt(data[2]);
-                Mother mother = new Mother(motherId, name, age);
-                mothers.add(mother);
+
+                mothers.add(new Mother(motherId, name, age));
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return mothers;
     }
 
-    public List<Child> loadChildren(String filename, List<Mother> mothers) throws IOException {
+    public List<Child> loadChildren(String filename, List<Mother> mothers) {
         List<Child> children = new ArrayList<>();
+
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
+
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(" ");
                 int childId = Integer.parseInt(data[0]);
@@ -42,13 +48,10 @@ public class DataLoader {
                 int height = Integer.parseInt(data[5]);
                 int motherId = Integer.parseInt(data[6]);
 
-                Mother mother = null;
-                for (Mother m : mothers) {
-                    if (m.getId() == motherId) {
-                        mother = m;
-                        break;
-                    }
-                }
+                Mother mother = mothers.stream()
+                        .filter(m -> m.getId() == motherId)
+                        .findFirst()
+                        .orElse(null);
 
                 if (mother != null) {
                     Child child = new Child(childId, gender, name, birthDate, weight, height, mother);
@@ -56,7 +59,10 @@ public class DataLoader {
                     children.add(child);
                 }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
         return children;
     }
 }

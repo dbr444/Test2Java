@@ -44,4 +44,12 @@ public class Child {
     public Mother getMother() {
         return mother;
     }
+
+    @Override
+    public String toString() {
+        return "Child{" +
+                "name='" + name + '\'' +
+                ", birthDate=" + birthDate +
+                '}';
+    }
 }

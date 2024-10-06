@@ -1,6 +1,7 @@
 package test2.zad2.services;
 
-import test2.zad2.models.Patient;
+import test2.zad2.models.person.Doctor;
+import test2.zad2.models.person.Patient;
 import test2.zad2.models.Visit;
 
 import java.util.ArrayList;
@@ -11,7 +12,8 @@ public class PatientService {
         int[] visitCounts = new int[patients.size()];
 
         for (Visit visit : visits) {
-            int patientIndex = findPatientIndex(patients, visit.getPatientId());
+            Patient patient = visit.getPatient();
+            int patientIndex = findPatientIndex(patients, patient.getId());
             if (patientIndex != -1) {
                 visitCounts[patientIndex]++;
             }
@@ -39,13 +41,13 @@ public class PatientService {
 
         for (Patient patient : patients) {
             int doctorCount = 0;
-            List<Integer> visitedDoctors = new ArrayList<>();
+            List<Doctor> visitedDoctors = new ArrayList<>();
 
             for (Visit visit : visits) {
-                if (visit.getPatientId() == patient.getId()) {
-                    int doctorId = visit.getDoctorId();
-                    if (!visitedDoctors.contains(doctorId)) {
-                        visitedDoctors.add(doctorId);
+                if (visit.getPatient().equals(patient)) {
+                    Doctor doctor = visit.getDoctor();
+                    if (!visitedDoctors.contains(doctor)) {
+                        visitedDoctors.add(doctor);
                         doctorCount++;
                     }
                 }

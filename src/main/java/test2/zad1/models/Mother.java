@@ -35,4 +35,14 @@ public class Mother {
     public void addChild(Child child) {
         children.add(child);
     }
+
+    @Override
+    public String toString() {
+        return "Mother{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                ", children=" + children +
+                '}';
+    }
 }

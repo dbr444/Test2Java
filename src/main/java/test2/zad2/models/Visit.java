@@ -1,23 +1,27 @@
 package test2.zad2.models;
+
+import test2.zad2.models.person.Doctor;
+import test2.zad2.models.person.Patient;
+
 import java.time.LocalDate;
 
 public class Visit {
-    private int doctorId;
-    private int patientId;
+    private Doctor doctor;
+    private Patient patient;
     private LocalDate visitDate;
 
-    public Visit(int doctorId, int patientId, LocalDate visitDate) {
-        this.doctorId = doctorId;
-        this.patientId = patientId;
+    public Visit(Doctor doctor, Patient patient, LocalDate visitDate) {
+        this.doctor = doctor;
+        this.patient = patient;
         this.visitDate = visitDate;
     }
 
-    public int getDoctorId() {
-        return doctorId;
+    public Doctor getDoctor() {
+        return doctor;
     }
 
-    public int getPatientId() {
-        return patientId;
+    public Patient getPatient() {
+        return patient;
     }
 
     public LocalDate getVisitDate() {

@@ -2,44 +2,48 @@ package test2.zad1.services;
 
 import test2.zad1.models.Child;
 import test2.zad1.models.Mother;
+import test2.zad1.models.TallestBoyAndGirlResult;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ChildService {
-    public static List<Child> findTallestBoyAndGirl(List<Child> children) { //zakladamy, ze lista nie bedzie posiadala nullowych elementow, poniewaz pliki, ktore sa odczytywane, sa ustandaryzowane
+
+    private static Child getTallestBoy(List<Child> children) {
         Child tallestBoy = null;
+
+        for (Child child : children) {
+            if (child.getGender().equals("s")) {
+                if (tallestBoy == null || child.getHeight() > tallestBoy.getHeight()) {
+                    tallestBoy = child;
+                }
+            }
+        }
+
+        return tallestBoy;
+    }
+
+    private static Child getTallestGirl(List<Child> children) {
         Child tallestGirl = null;
 
         for (Child child : children) {
-            if (child.getGender().equals("s")) {
-                tallestBoy = child;
-                break;
-            }
-        }
-
-        for (Child child : children) {
             if (child.getGender().equals("c")) {
-                tallestGirl = child;
-                break;
-            }
-
-        }
-
-        for (Child child : children) {
-            if (child.getGender().equals("s")) {
-                if (child.getHeight() > tallestBoy.getHeight()) {
-                    tallestBoy = child;
-                }
-            } else if (child.getGender().equals("c")) {
-                if (child.getHeight() > tallestGirl.getHeight()) {
+                if (tallestGirl == null || child.getHeight() > tallestGirl.getHeight()) {
                     tallestGirl = child;
                 }
             }
         }
 
-        return List.of(tallestBoy, tallestGirl);
+        return tallestGirl;
+    }
+    public static TallestBoyAndGirlResult findTallestBoyAndGirl(List<Child> children) {
+        Child tallestBoy = getTallestBoy(children);
+        Child tallestGirl = getTallestGirl(children);
+        return new TallestBoyAndGirlResult(tallestBoy, tallestGirl);
     }
 
     public static DayOfWeek findDayOfWeekWithMostBirths(List<Child> children) {
@@ -61,14 +65,14 @@ public class ChildService {
         return dayOfWeeksArray[mostBirthIndex];
     }
 
-    public static List<String> findYoungMothersWithHeavyChildren(List<Mother> mothers) {
-        List<String> youngMothersWithHeavyChildren = new ArrayList<>();
+    public static List<Mother> findYoungMothersWithHeavyChildren(List<Mother> mothers) {
+        List<Mother> youngMothersWithHeavyChildren = new ArrayList<>();
 
         for (Mother mother : mothers) {
             if (mother.getAge() < 25) {
                 for (Child child : mother.getChildren()) {
                     if (child.getWeight() > 4000) {
-                        youngMothersWithHeavyChildren.add(mother.getName());
+                        youngMothersWithHeavyChildren.add(mother);
                         break;
                     }
                 }
@@ -77,24 +81,29 @@ public class ChildService {
         return youngMothersWithHeavyChildren;
     }
 
-    public static List<String> findGirlsWithInheritedNames(List<Child> children) {
-        List<String> girlsWithInheritedNames = new ArrayList<>();
+    public static List<Child> findGirlsWithInheritedNames(List<Child> children) {
+        List<Child> girlsWithInheritedNames = new ArrayList<>();
 
         for (Child child : children) {
             if (child.getGender().equals("c") && child.getName().equals(child.getMother().getName())) {
-                girlsWithInheritedNames.add(child.getName() + " - " + child.getBirthDate());
+                girlsWithInheritedNames.add(child);
             }
         }
 
         return girlsWithInheritedNames;
     }
 
-    public static List<String> findMothersOfTwins(List<Mother> mothers) {
-        List<String> mothersOfTwins = new ArrayList<>();
+    public static List<Mother> findMothersOfTwins(List<Mother> mothers) {
+        List<Mother> mothersOfTwins = new ArrayList<>();
 
         for (Mother mother : mothers) {
-            if (mother.getChildren().size() > 1) {
-                mothersOfTwins.add(mother.getName());
+            List<Child> children = mother.getChildren();
+            Set<LocalDate> localDateSet = new HashSet<>();
+            for (Child child : mother.getChildren()) {
+                localDateSet.add(child.getBirthDate());
+            }
+            if (children.size() != localDateSet.size()) {
+                mothersOfTwins.add(mother);
             }
         }
 

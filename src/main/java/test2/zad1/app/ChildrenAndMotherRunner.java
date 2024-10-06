@@ -1,56 +1,53 @@
 package test2.zad1.app;
 
+import test2.zad1.models.TallestBoyAndGirlResult;
 import test2.zad1.services.ChildService;
 import test2.zad1.models.Child;
 import test2.zad1.models.Mother;
 
 import java.time.DayOfWeek;
-import java.util.ArrayList;
 import java.util.List;
-import java.io.IOException;
 
 public class ChildrenAndMotherRunner {
 
-
     public static void main(String[] args) {
         DataLoader dataLoader = new DataLoader();
-        List<Mother> mothers = new ArrayList<>();
-        List<Child> children = new ArrayList<>();
-
-        try {
-            mothers = dataLoader.loadMothers("mamy.txt");
-            children = dataLoader.loadChildren("noworodki.txt", mothers);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        List<Mother> mothers = dataLoader.loadMothers("mamy.txt");
+        List<Child> children = dataLoader.loadChildren("noworodki.txt", mothers);
 
         // a) Najwyższy chłopiec i dziewczynka
-        List<Child> tallestChildren = ChildService.findTallestBoyAndGirl(children);
-        if (tallestChildren.get(0) != null) {
-            System.out.println("Tallest boy: " + tallestChildren.get(0).getName() +
-                    ", height: " + tallestChildren.get(0).getHeight() + " cm");
-        }
-        if (tallestChildren.get(1) != null) {
-            System.out.println("Tallest girl: " + tallestChildren.get(1).getName() +
-                    ", height: " + tallestChildren.get(1).getHeight() + " cm");
-        }
+        TallestBoyAndGirlResult result = ChildService.findTallestBoyAndGirl(children);
+
+        Child tallestBoy = result.getTallestBoy();
+        Child tallestGirl = result.getTallestGirl();
+
+        System.out.println("Tallest boy: " + tallestBoy.getName() + ", height: " + tallestBoy.getHeight() + " cm");
+        System.out.println("Tallest girl: " + tallestGirl.getName() + ", height: " + tallestGirl.getHeight() + " cm");
 
         // b) Dzień tygodnia z największą liczbą urodzeń + ta liczba
         DayOfWeek info = ChildService.findDayOfWeekWithMostBirths(children);
         System.out.println("Most common day of birth: " + info);
 
-
         // c) Matki poniżej 25 lat z dziećmi powyżej 4000g
-        List<String> youngMothers = ChildService.findYoungMothersWithHeavyChildren(mothers);
-        System.out.println("Mothers under 25 with children over 4000g: " + youngMothers);
+        List<Mother> youngMothers = ChildService.findYoungMothersWithHeavyChildren(mothers);
+        System.out.println("Mothers under 25 with children over 4000g: ");
+        for (Mother mother : youngMothers) {
+            System.out.println(mother.getName());
+        }
 
         // d) Dziewczynki, które odziedziczyły imię
-        List<String> inheritedNames = ChildService.findGirlsWithInheritedNames(children);
-        System.out.println("Girls who inherited names from their mothers: " + inheritedNames);
+        List<Child> girlsWithInheritedNames = ChildService.findGirlsWithInheritedNames(children);
+        System.out.println("Girls with inherited names from their mothers:");
+        for (Child child : girlsWithInheritedNames) {
+            System.out.println("Name: " + child.getName() + ", Birth Date: " + child.getBirthDate());
+        }
 
         // e) Matki blizniakow
-        List<String> twinMothers = ChildService.findMothersOfTwins(mothers);
+        List<Mother> twinMothers = ChildService.findMothersOfTwins(mothers);
         System.out.println("Mothers of twins: " + twinMothers);
+        for (Mother mother : twinMothers) {
+            System.out.println(mother.getName());
+        }
     }
 
 }

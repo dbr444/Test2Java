@@ -1,6 +1,6 @@
 package test2.zad2.services;
 
-import test2.zad2.models.Doctor;
+import test2.zad2.models.person.Doctor;
 import test2.zad2.models.Visit;
 
 import java.util.*;
@@ -11,11 +11,14 @@ public class DoctorService {
         int[] visitCounts = new int[doctors.size()];
 
         for (Visit visit : visits) {
-            int doctorIndex = findDoctorIndex(doctors, visit.getDoctorId());
+            Doctor doctor = visit.getDoctor();
+            int doctorIndex = findDoctorIndex(doctors, doctor.getId());
+
             if (doctorIndex != -1) {
                 visitCounts[doctorIndex]++;
             }
         }
+
 
         int maxIndex = 0;
         for (int i = 1; i < visitCounts.length; i++) {
@@ -36,7 +39,8 @@ public class DoctorService {
         int[] visitCounts = new int[doctors.size()];
 
         for (Visit visit : visits) {
-            int doctorIndex = findDoctorIndex(doctors, visit.getDoctorId());
+            Doctor doctor = visit.getDoctor();
+            int doctorIndex = findDoctorIndex(doctors, doctor.getId());
             if (doctorIndex != -1) {
                 visitCounts[doctorIndex]++;
             }
@@ -69,7 +73,8 @@ public class DoctorService {
         }
 
         for (Visit visit : visits) {
-            int doctorIndex = findDoctorIndex(doctors, visit.getDoctorId());
+            Doctor doctor = visit.getDoctor();
+            int doctorIndex = findDoctorIndex(doctors, doctor.getId());
             if (doctorIndex != -1) {
                 String specialization = specializations[doctorIndex];
 
@@ -97,7 +102,8 @@ public class DoctorService {
         int[] patientCount = new int[doctors.size()];
 
         for (Visit visit : visits) {
-            int doctorIndex = findDoctorIndex(doctors, visit.getDoctorId());
+            Doctor doctor = visit.getDoctor();
+            int doctorIndex = findDoctorIndex(doctors, doctor.getId());
             if (doctorIndex != -1) {
                 patientCount[doctorIndex]++;
             }
